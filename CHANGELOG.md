@@ -1,0 +1,2 @@
+- 0.1.1.0
+  - Add Dual, All, Any, Sum, Product, First and Last instances

@@ -11,6 +11,7 @@ category: Web
 tested-with: GHC==7.8.4, GHC==7.10.2
 extra-source-files:
 - README.md
+- CHANGELOG.md
 
 ghc-options: -Wall -fno-warn-orphans
 

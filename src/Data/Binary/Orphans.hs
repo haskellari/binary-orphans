@@ -32,6 +32,7 @@ import           Data.Fixed
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
 import           Data.Hashable (Hashable)
+import qualified Data.Monoid as Monoid
 import qualified Data.Scientific as S
 import qualified Data.Tagged as Tagged
 import qualified Data.Time as Time
@@ -113,3 +114,20 @@ instance Binary Time.TimeOfDay where
 instance Binary Time.LocalTime where
   get = liftM2 Time.LocalTime get get
   put (Time.LocalTime d tod) = put d >> put tod
+
+-- Monoid
+
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary a => Binary (Monoid.Dual a)
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary Monoid.All
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary Monoid.Any
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary a => Binary (Monoid.Sum a)
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary a => Binary (Monoid.Product a)
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary a => Binary (Monoid.First a)
+-- | /Since: binary-orphans-0.1.1.0/
+instance Binary a => Binary (Monoid.Last a)
