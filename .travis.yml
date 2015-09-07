@@ -10,8 +10,9 @@ before_install:
 install:
 - if [ -f $HOME/.cabal/packages/hackage.haskell.org/00-index.tar.gz ]; then zcat $HOME/.cabal/packages/hackage.haskell.org/00-index.tar.gz
   > $HOME/.cabal/packages/hackage.haskell.org/00-index.tar; ls -l $HOME/.cabal/packages/hackage.haskell.org/;
-  fi; cabal update; sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config; cabal install
-  --only-dependencies --enable-tests --enable-benchmarks --dry -v > installplan.txt;
+  fi; cabal update; sed -i 's/^jobs:/-- jobs:/' ${HOME}/.cabal/config; if [ -n "$STACKAGESNAPSHOT"
+  ]; then curl -O https://www.stackage.org/$STACKAGESNAPSHOT/cabal.config; fi; cabal
+  install --only-dependencies --enable-tests --enable-benchmarks --dry -v > installplan.txt;
   sed -i -e '1,/^Resolving /d' installplan.txt; cat installplan.txt; if diff -u $HOME/.cabsnap/installplan.txt
   installplan.txt; then echo "cabal build-cache HIT"; rm -rfv .ghc; cp -av $HOME/.cabsnap/ghc
   $HOME/.ghc; cp -av $HOME/.cabsnap/lib $HOME/.cabsnap/share $HOME/.cabsnap/bin $HOME/.cabal/;
@@ -52,7 +53,7 @@ matrix:
         - cabal-install-1.18
         - ghc-7.8.4
         - libgmp-dev
-    compiler: ! ': # ghc-7.8.4 cabal-1.18'
+    compiler: ! ': # ghc-7.8.4 cabal-1.18 lts-2.22'
   - env: GHCVER=7.10.2 CABALVER=1.22
     addons:
       apt:
@@ -72,7 +73,7 @@ matrix:
         - cabal-install-1.22
         - ghc-7.10.2
         - libgmp-dev
-    compiler: ! ': # ghc-7.10.2 cabal-1.22'
+    compiler: ! ': # ghc-7.10.2 cabal-1.22 lts-3.4'
   - env: GHCVER=head CABALVER=1.22
     addons:
       apt:
