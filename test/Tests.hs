@@ -10,6 +10,7 @@ import Test.Tasty.QuickCheck as QC
 import Data.HashMap.Lazy (HashMap)
 import Data.HashSet (HashSet)
 import Data.Time (UTCTime, Day, DiffTime, NominalDiffTime, TimeZone, TimeOfDay, LocalTime)
+import Data.Monoid (Sum)
 
 main :: IO ()
 main = defaultMain tests
