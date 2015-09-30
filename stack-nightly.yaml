@@ -1,0 +1,9 @@
+resolver: nightly-2015-09-29
+packages:
+- '.'
+extra-deps:
+- aeson-0.10.0.0
+- attoparsec-0.13.0.1
+- scientific-0.3.4.0
+- vector-0.11.0.0
+flags: {}
