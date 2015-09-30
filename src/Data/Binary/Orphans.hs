@@ -10,7 +10,7 @@
 -- Provides orphan 'Binary' instances for types in various packages:
 --
 --   * aeson
---   * scientific
+--   * scientific (prior to scientific-0.3.4.0)
 --   * tagged
 --   * text (through text-binary, or text >= 1.2.1)
 --   * time
@@ -71,9 +71,11 @@ instance (Hashable v, Eq v, Binary v) => Binary (HS.HashSet v) where
   get = fmap HS.fromList get
   put = put . HS.toList
 
+#if !MIN_VERSION_scientific(0,3,4)
 instance Binary S.Scientific where
   get = liftM2 S.scientific get get
   put s = put (S.coefficient s) >> put (S.base10Exponent s)
+#endif
 
 instance Binary b => Binary (Tagged.Tagged s b) where
   put = put . Tagged.unTagged
