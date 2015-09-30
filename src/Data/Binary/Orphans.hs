@@ -33,7 +33,6 @@ import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
 import           Data.Hashable (Hashable)
 import qualified Data.Monoid as Monoid
-import qualified Data.Scientific as S
 import qualified Data.Tagged as Tagged
 import qualified Data.Time as Time
 
@@ -42,6 +41,10 @@ import qualified Data.Time as Time
 import           Data.Text.Binary ()
 #endif
 import           Data.Vector.Binary ()
+
+#if !(MIN_VERSION_scientific(0,3,4))
+import qualified Data.Scientific as S
+#endif
 
 instance Binary A.Value where
   get = do
@@ -71,7 +74,7 @@ instance (Hashable v, Eq v, Binary v) => Binary (HS.HashSet v) where
   get = fmap HS.fromList get
   put = put . HS.toList
 
-#if !MIN_VERSION_scientific(0,3,4)
+#if !(MIN_VERSION_scientific(0,3,4))
 instance Binary S.Scientific where
   get = liftM2 S.scientific get get
   put s = put (S.coefficient s) >> put (S.base10Exponent s)
