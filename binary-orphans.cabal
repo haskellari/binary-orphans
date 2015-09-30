@@ -1,4 +1,4 @@
--- This file has been generated from package.yaml by hpack version 0.7.0.
+-- This file has been generated from package.yaml by hpack version 0.8.0.
 --
 -- see: https://github.com/sol/hpack
 
@@ -64,7 +64,7 @@ test-suite binary-orphans-test
     , unordered-containers     >=0.2  && <0.3
     , vector                   >=0.10 && <0.12
     , binary-orphans
-    , quickcheck-instances
-    , tasty
-    , tasty-quickcheck
+    , quickcheck-instances >=0.3  && <0.4
+    , tasty                >=0.10 && <0.12
+    , tasty-quickcheck     >=0.8  && <0.9
   default-language: Haskell2010
