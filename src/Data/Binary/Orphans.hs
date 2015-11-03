@@ -122,7 +122,7 @@ instance Binary Time.LocalTime where
 
 -- Monoid
 
--- | /Since: binary-orphans-0.1.1.0/
+-- | @since 0.1.1.0
 instance Binary a => Binary (Monoid.Dual a)
 -- | /Since: binary-orphans-0.1.1.0/
 instance Binary Monoid.All

@@ -21,7 +21,7 @@ dependencies:
   - binary                   >=0.7  && <0.7.7  # We define Binary instances
   - hashable                 >=1.2  && <1.3
   - scientific               >=0.3  && <0.4
-  - tagged                   >=0.7  && <0.8.2  # Binary Tagged
+  - tagged                   >=0.7  && <0.8.3  # Binary Tagged
   - text                     >=1.2  && <1.3
   - time                     >=1.4  && <1.5.1  # Binary UTCTime etc.
   - unordered-containers     >=0.2  && <0.3

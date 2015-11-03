@@ -6,4 +6,5 @@ extra-deps:
 - attoparsec-0.13.0.1
 - scientific-0.3.4.0
 - vector-0.11.0.0
+- tagged-0.8.2
 flags: {}
