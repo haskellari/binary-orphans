@@ -11,6 +11,7 @@
 --
 --   * aeson
 --   * scientific (prior to scientific-0.3.4.0)
+--   * semigroups
 --   * tagged
 --   * text (through text-binary, or text >= 1.2.1)
 --   * time
@@ -32,7 +33,9 @@ import           Data.Fixed
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
 import           Data.Hashable (Hashable)
+import qualified Data.List.NonEmpty as NE
 import qualified Data.Monoid as Monoid
+import qualified Data.Semigroup as Semigroup
 import qualified Data.Tagged as Tagged
 import qualified Data.Time as Time
 
@@ -136,3 +139,35 @@ instance Binary a => Binary (Monoid.Product a)
 instance Binary a => Binary (Monoid.First a)
 -- | /Since: binary-orphans-0.1.1.0/
 instance Binary a => Binary (Monoid.Last a)
+
+-- Semigroup
+
+-- | /Since: binary-orphans-0.1.3.0/
+instance Binary a => Binary (Semigroup.Min a) where
+  get = fmap Semigroup.Min get
+  put = put . Semigroup.getMin
+
+-- | /Since: binary-orphans-0.1.3.0/
+instance Binary a => Binary (Semigroup.Max a) where
+  get = fmap Semigroup.Max get
+  put = put . Semigroup.getMax
+
+-- | /Since: binary-orphans-0.1.3.0/
+instance Binary a => Binary (Semigroup.First a) where
+  get = fmap Semigroup.First get
+  put = put . Semigroup.getFirst
+
+-- | /Since: binary-orphans-0.1.3.0/
+instance Binary a => Binary (Semigroup.Last a) where
+  get = fmap Semigroup.Last get
+  put = put . Semigroup.getLast
+
+-- | /Since: binary-orphans-0.1.3.0/
+instance Binary a => Binary (Semigroup.Option a) where
+  get = fmap Semigroup.Option get
+  put = put . Semigroup.getOption
+
+-- | /Since: binary-orphans-0.1.3.0/
+instance Binary a => Binary (NE.NonEmpty a) where
+  get = fmap NE.fromList get
+  put = put . NE.toList

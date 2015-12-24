@@ -1,5 +1,5 @@
 name: binary-orphans
-version: 0.1.2.0
+version: 0.1.3.0
 synopsis: Orphan instances for binary
 description: |
   `binary-orphans` defines orphan instances for types in some popular packages.
@@ -21,6 +21,7 @@ dependencies:
   - binary                   >=0.7  && <0.7.7  # We define Binary instances
   - hashable                 >=1.2  && <1.3
   - scientific               >=0.3  && <0.4
+  - semigroups               >=0.16 && <0.18.1 # Binary NonEmpty
   - tagged                   >=0.7  && <0.8.3  # Binary Tagged
   - text                     >=1.2  && <1.3
   - time                     >=1.4  && <1.5.1  # Binary UTCTime etc.
