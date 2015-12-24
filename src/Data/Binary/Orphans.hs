@@ -87,9 +87,11 @@ instance Binary b => Binary (Tagged.Tagged s b) where
   put = put . Tagged.unTagged
   get = fmap Tagged.Tagged get
 
+#if !MIN_VERSION_binary(0,8,0)
 instance Binary (Fixed a) where
   put (MkFixed a) = put a
   get = MkFixed `liftM` get
+#endif
 
 instance Binary Time.Day where
   get = fmap Time.ModifiedJulianDay get
