@@ -1,3 +1,6 @@
+- 0.1.3.1
+  - Support GHC 7.6
+
 - 0.1.3.0
   - Add `Min`, `Max`, `First`, `Last`, `Option`, and `NonEmpty` instances (from `semigroups`)
 
