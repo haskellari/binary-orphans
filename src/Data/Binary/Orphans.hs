@@ -1,5 +1,11 @@
 {-# LANGUAGE CPP #-}
 {-# LANGUAGE PolyKinds #-}
+#if MIN_VERSION_base(4,7,0)
+#define HAS_FIXED_CONSTRUCTOR
+#endif
+#ifndef HAS_FIXED_CONSTRUCTOR
+{-# LANGUAGE ScopedTypeVariables #-}
+#endif
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  Data.Binary.Orphans
@@ -29,7 +35,7 @@ module Data.Binary.Orphans (
 import           Control.Monad (liftM, liftM2, liftM3)
 import qualified Data.Aeson as A
 import           Data.Binary
-import           Data.Fixed
+import qualified Data.Fixed as Fixed
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
 import           Data.Hashable (Hashable)
@@ -88,9 +94,16 @@ instance Binary b => Binary (Tagged.Tagged s b) where
   get = fmap Tagged.Tagged get
 
 #if !MIN_VERSION_binary(0,8,0)
-instance Binary (Fixed a) where
-  put (MkFixed a) = put a
-  get = MkFixed `liftM` get
+#ifdef HAS_FIXED_CONSTRUCTOR
+instance Binary (Fixed.Fixed a) where
+  put (Fixed.MkFixed a) = put a
+  get = Fixed.MkFixed `liftM` get
+#else
+instance Fixed.HasResolution a => Binary (Fixed.Fixed a) where
+  -- Using undefined :: Maybe a as a proxy, as Data.Proxy is introduced only in base-4.7
+  put x = put (truncate (x * fromInteger (Fixed.resolution (undefined :: Maybe a))) :: Integer)
+  get = (\x -> fromInteger x / fromInteger (Fixed.resolution (undefined :: Maybe a))) `liftM` get
+#endif
 #endif
 
 instance Binary Time.Day where
@@ -103,15 +116,15 @@ instance Binary Time.UniversalTime where
 
 instance Binary Time.DiffTime where
   get = fmap Time.picosecondsToDiffTime get
-  put = (put :: Pico -> Put)  . realToFrac
+  put = (put :: Fixed.Pico -> Put)  . realToFrac
 
 instance Binary Time.UTCTime where
   get = liftM2 Time.UTCTime get get
   put (Time.UTCTime d dt) = put d >> put dt
 
 instance Binary Time.NominalDiffTime where
-  get = fmap realToFrac (get :: Get Pico)
-  put = (put :: Pico -> Put)  . realToFrac
+  get = fmap realToFrac (get :: Get Fixed.Pico)
+  put = (put :: Fixed.Pico -> Put)  . realToFrac
 
 instance Binary Time.TimeZone where
   get = liftM3 Time.TimeZone get get get
@@ -128,19 +141,39 @@ instance Binary Time.LocalTime where
 -- Monoid
 
 -- | @since 0.1.1.0
-instance Binary a => Binary (Monoid.Dual a)
+instance Binary a => Binary (Monoid.Dual a) where
+  get = fmap Monoid.Dual get
+  put = put . Monoid.getDual
+
 -- | /Since: binary-orphans-0.1.1.0/
-instance Binary Monoid.All
+instance Binary Monoid.All where
+  get = fmap Monoid.All get
+  put = put . Monoid.getAll
+
 -- | /Since: binary-orphans-0.1.1.0/
-instance Binary Monoid.Any
+instance Binary Monoid.Any where
+  get = fmap Monoid.Any get
+  put = put . Monoid.getAny
+
 -- | /Since: binary-orphans-0.1.1.0/
-instance Binary a => Binary (Monoid.Sum a)
+instance Binary a => Binary (Monoid.Sum a) where
+  get = fmap Monoid.Sum get
+  put = put . Monoid.getSum
+
 -- | /Since: binary-orphans-0.1.1.0/
-instance Binary a => Binary (Monoid.Product a)
+instance Binary a => Binary (Monoid.Product a) where
+  get = fmap Monoid.Product get
+  put = put . Monoid.getProduct
+
 -- | /Since: binary-orphans-0.1.1.0/
-instance Binary a => Binary (Monoid.First a)
+instance Binary a => Binary (Monoid.First a) where
+  get = fmap Monoid.First get
+  put = put . Monoid.getFirst
+
 -- | /Since: binary-orphans-0.1.1.0/
-instance Binary a => Binary (Monoid.Last a)
+instance Binary a => Binary (Monoid.Last a) where
+  get = fmap Monoid.Last get
+  put = put . Monoid.getLast
 
 -- Semigroup
 
