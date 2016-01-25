@@ -1,3 +1,6 @@
+- 0.1.4.0
+  - Add `AbsoluteTime` instance (thanks @neongreen)
+
 - 0.1.3.1
   - Support GHC 7.6
 
