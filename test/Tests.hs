@@ -10,6 +10,7 @@ import Test.Tasty.QuickCheck as QC
 import Data.HashMap.Lazy (HashMap)
 import Data.HashSet (HashSet)
 import Data.Time (UTCTime, Day, DiffTime, NominalDiffTime, TimeZone, TimeOfDay, LocalTime)
+import Data.Time.Clock.TAI (AbsoluteTime)
 import Data.Monoid (Sum)
 
 main :: IO ()
@@ -26,6 +27,7 @@ tests = testGroup "Roundtrip"
   , QC.testProperty "TimeZone"        $ roundtrip (Proxy :: Proxy TimeZone)
   , QC.testProperty "TimeOfDay"       $ roundtrip (Proxy :: Proxy TimeOfDay)
   , QC.testProperty "LocalTime"       $ roundtrip (Proxy :: Proxy LocalTime)
+  , QC.testProperty "AbsoluteTime"    $ roundtrip (Proxy :: Proxy AbsoluteTime)
   ]
 
 roundtrip :: (Eq a, Show a, Arbitrary a, Binary a) => Proxy a -> a -> Property

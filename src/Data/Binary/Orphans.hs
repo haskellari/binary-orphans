@@ -44,6 +44,7 @@ import qualified Data.Monoid as Monoid
 import qualified Data.Semigroup as Semigroup
 import qualified Data.Tagged as Tagged
 import qualified Data.Time as Time
+import qualified Data.Time.Clock.TAI as Time
 
 -- From other packages
 #if !(MIN_VERSION_text(1,2,1))
@@ -137,6 +138,10 @@ instance Binary Time.TimeOfDay where
 instance Binary Time.LocalTime where
   get = liftM2 Time.LocalTime get get
   put (Time.LocalTime d tod) = put d >> put tod
+
+instance Binary Time.AbsoluteTime where
+  get = fmap (flip Time.addAbsoluteTime Time.taiEpoch) get
+  put = put . flip Time.diffAbsoluteTime Time.taiEpoch
 
 -- Monoid
 
