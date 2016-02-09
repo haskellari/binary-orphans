@@ -28,11 +28,6 @@ dependencies:
   - unordered-containers     >=0.2.5.1   && <0.3
   - vector                   >=0.10.12.3 && <0.12
 
-when:
-  - condition: "!impl(ghc >= 8.0)"
-    dependencies:
-      - semigroups               >=0.16 && <0.18.1 # Binary NonEmpty
-
 library:
   source-dirs: src
   dependencies:
