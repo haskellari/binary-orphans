@@ -16,8 +16,8 @@ extra-source-files:
 ghc-options: -Wall -fno-warn-orphans
 
 dependencies:
-  - base                     >=4.6.0.1   && <4.9
-  - aeson                    >=0.7.0.6   && <0.10.1 # Binary Value
+  - base                     >=4.6.0.1   && <4.10
+  - aeson                    >=0.7.0.6   && <0.11.1 # Binary Value
   - binary                   >=0.5.1.1   && <0.8.1  # We define Binary instances
   - hashable                 >=1.2.3.3   && <1.3
   - scientific               >=0.3.3.8   && <0.4
