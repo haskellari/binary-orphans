@@ -1,5 +1,5 @@
 name: binary-orphans
-version: 0.1.4.0
+version: 0.1.5.0
 synopsis: Orphan instances for binary
 description: |
   `binary-orphans` defines orphan instances for types in some popular packages.
@@ -18,15 +18,24 @@ ghc-options: -Wall -fno-warn-orphans
 dependencies:
   - base                     >=4.6.0.1   && <4.10
   - aeson                    >=0.7.0.6   && <0.11.3 # Binary Value
-  - binary                   >=0.5.1.1   && <0.8.4  # We define Binary instances
+  - binary                   >=0.5.1.1   && <0.8.5  # We define Binary instances
+  - case-insensitive         >=1.2.0.4   && <1.2.1
   - hashable                 >=1.2.3.3   && <1.3
   - scientific               >=0.3.3.8   && <0.4
-  - semigroups               >=0.16.2.2  && <0.18.2 # Binary NonEmpty
   - tagged                   >=0.7.3     && <0.8.5  # Binary Tagged
   - text                     >=1.2.0.6   && <1.3
   - time                     >=1.4.0.1   && <1.6.1  # Binary UTCTime etc.
   - unordered-containers     >=0.2.5.1   && <0.3
   - vector                   >=0.10.12.3 && <0.12
+
+when:
+  - condition: "!impl(ghc >= 8.0)"
+    dependencies:
+    - semigroups               >=0.16.2.2  && <0.18.2 # Binary NonEmpty
+  - condition: "!impl(ghc >= 7.10)"
+    dependencies:
+    - void                     >=0.7       && <0.8
+    - nats                     >=1         && <1.2
 
 library:
   source-dirs: src
@@ -40,6 +49,6 @@ tests:
     source-dirs: test
     dependencies:
       - binary-orphans
-      - quickcheck-instances >=0.3.11   && <0.4
+      - quickcheck-instances >=0.3.11   && <0.3.13
       - tasty                >=0.10.1.2 && <0.12
       - tasty-quickcheck     >=0.8.3.2  && <0.9

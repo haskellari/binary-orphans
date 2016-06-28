@@ -1,3 +1,11 @@
+- 0.1.5.0
+  - Add `CI a` instance
+  - Add `Alt f a` instance for `base >= 4.8.0.0`
+  - Add `WrappedMonoid m` and `Arg a b` instances
+  - Support `binary-0.8.4.0`
+  - Add `Void` instance (`base <4.8`)
+  - Add `Natural` instance (`nats <1.1`, `base <4.8`)
+
 - 0.1.4.0
   - Add `AbsoluteTime` instance (thanks @neongreen)
 

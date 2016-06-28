@@ -12,6 +12,10 @@ import Data.HashSet (HashSet)
 import Data.Time (UTCTime, Day, DiffTime, NominalDiffTime, TimeZone, TimeOfDay, LocalTime)
 import Data.Time.Clock.TAI (AbsoluteTime)
 import Data.Monoid (Sum)
+import Data.Text (Text)
+import Data.CaseInsensitive (CI)
+
+import qualified Data.CaseInsensitive as CI
 
 main :: IO ()
 main = defaultMain tests
@@ -28,8 +32,11 @@ tests = testGroup "Roundtrip"
   , QC.testProperty "TimeOfDay"       $ roundtrip (Proxy :: Proxy TimeOfDay)
   , QC.testProperty "LocalTime"       $ roundtrip (Proxy :: Proxy LocalTime)
   , QC.testProperty "AbsoluteTime"    $ roundtrip (Proxy :: Proxy AbsoluteTime)
+  , QC.testProperty "CI Text"         $ roundtrip (Proxy :: Proxy (CI Text))
   ]
 
-roundtrip :: (Eq a, Show a, Arbitrary a, Binary a) => Proxy a -> a -> Property
+roundtrip :: (Eq a, Show a, Binary a) => Proxy a -> a -> Property
 roundtrip _ x = x === decode (encode x)
 
+instance (CI.FoldCase a, Arbitrary a) => Arbitrary (CI a) where
+    arbitrary = fmap CI.mk arbitrary

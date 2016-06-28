@@ -1,4 +1,5 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE PolyKinds #-}
 #if MIN_VERSION_base(4,7,0)
 #define HAS_FIXED_CONSTRUCTOR
@@ -32,19 +33,24 @@ module Data.Binary.Orphans (
   module Data.Binary,
   ) where
 
-import           Control.Monad (liftM, liftM2, liftM3)
+import           Control.Monad (liftM, liftM2, liftM3, mzero)
 import qualified Data.Aeson as A
+import           Data.Bits
 import           Data.Binary
+import qualified Data.CaseInsensitive as CI
 import qualified Data.Fixed as Fixed
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
 import           Data.Hashable (Hashable)
+import           Data.List (unfoldr, foldl')
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Monoid as Monoid
 import qualified Data.Semigroup as Semigroup
 import qualified Data.Tagged as Tagged
 import qualified Data.Time as Time
 import qualified Data.Time.Clock.TAI as Time
+import qualified Data.Void as Void
+import           Numeric.Natural
 
 -- From other packages
 #if !(MIN_VERSION_text(1,2,1))
@@ -107,6 +113,10 @@ instance Fixed.HasResolution a => Binary (Fixed.Fixed a) where
 #endif
 #endif
 
+-------------------------------------------------------------------------------
+-- time
+-------------------------------------------------------------------------------
+
 instance Binary Time.Day where
   get = fmap Time.ModifiedJulianDay get
   put = put . Time.toModifiedJulianDay
@@ -144,7 +154,12 @@ instance Binary Time.AbsoluteTime where
   get = fmap (flip Time.addAbsoluteTime Time.taiEpoch) get
   put = put . flip Time.diffAbsoluteTime Time.taiEpoch
 
+
+#if !MIN_VERSION_binary(0,8,4) || !MIN_VERSION_base(4,9,0)
+
+-------------------------------------------------------------------------------
 -- Monoid
+-------------------------------------------------------------------------------
 
 -- | @since 0.1.1.0
 instance Binary a => Binary (Monoid.Dual a) where
@@ -181,7 +196,16 @@ instance Binary a => Binary (Monoid.Last a) where
   get = fmap Monoid.Last get
   put = put . Monoid.getLast
 
--- Semigroup
+#if MIN_VERSION_base(4,8,0)
+-- | /Since: binary-orphans-0.1.5.0/
+instance Binary (f a) => Binary (Monoid.Alt f a) where
+  get = fmap Monoid.Alt get
+  put = put . Monoid.getAlt
+#endif
+
+-------------------------------------------------------------------------------
+-- semigroups
+-------------------------------------------------------------------------------
 
 -- | /Since: binary-orphans-0.1.3.0/
 instance Binary a => Binary (Semigroup.Min a) where
@@ -212,3 +236,82 @@ instance Binary a => Binary (Semigroup.Option a) where
 instance Binary a => Binary (NE.NonEmpty a) where
   get = fmap NE.fromList get
   put = put . NE.toList
+
+-- | /Since: binary-orphans-0.1.5.0/
+instance Binary m => Binary (Semigroup.WrappedMonoid m) where
+  get = fmap Semigroup.WrapMonoid get
+  put = put . Semigroup.unwrapMonoid
+ 
+-- | /Since: binary-orphans-0.1.5.0/
+instance (Binary a, Binary b) => Binary (Semigroup.Arg a b) where
+  get                     = liftM2 Semigroup.Arg get get
+  put (Semigroup.Arg a b) = put a >> put b
+#endif
+
+-------------------------------------------------------------------------------
+-- case-insensitive
+-------------------------------------------------------------------------------
+
+-- | /Since: binary-orphans-0.1.5.0/
+instance (CI.FoldCase a, Binary a) => Binary (CI.CI a) where
+  get = fmap CI.mk get
+  put = put . CI.foldedCase
+
+-------------------------------------------------------------------------------
+-- void
+-------------------------------------------------------------------------------
+
+#if !MIN_VERSION_binary(0,8,0)
+instance Binary Void.Void where
+    put     = Void.absurd
+    get     = mzero
+#endif
+
+-------------------------------------------------------------------------------
+-- nats
+-------------------------------------------------------------------------------
+
+#ifndef MIN_VERSION_nats
+#define MIN_VERSION_nats(x,y,z) 0
+#endif
+
+#if !MIN_VERSION_binary(0,7,3) && !MIN_VERSION_nats(1,1,0)
+-- Fixed-size type for a subset of Natural
+type NaturalWord = Word64
+
+-- | /Since: 0.7.3.0/
+instance Binary Natural where
+    {-# INLINE put #-}
+    put n | n <= hi =
+        putWord8 0
+        >> put (fromIntegral n :: NaturalWord)  -- fast path
+     where
+        hi = fromIntegral (maxBound :: NaturalWord) :: Natural
+
+    put n =
+        putWord8 1
+        >> put (unroll (abs n))         -- unroll the bytes
+
+    {-# INLINE get #-}
+    get = do
+        tag <- get :: Get Word8
+        case tag of
+            0 -> liftM fromIntegral (get :: Get NaturalWord)
+            _ -> do bytes <- get
+                    return $! roll bytes
+
+
+--
+-- Fold and unfold an Integer to and from a list of its bytes
+--
+unroll :: (Integral a, Bits a) => a -> [Word8]
+unroll = unfoldr step
+  where
+    step 0 = Nothing
+    step i = Just (fromIntegral i, i `shiftR` 8)
+
+roll :: (Integral a, Bits a) => [Word8] -> a
+roll   = foldl' unstep 0 . reverse
+  where
+    unstep a b = a `shiftL` 8 .|. fromIntegral b
+#endif

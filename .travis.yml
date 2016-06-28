@@ -21,16 +21,17 @@ install:
   ]; then cp $CABALCONFIG cabal.config; fi; if [ -n "$STACKAGESNAPSHOT" ]; then curl
   --silent https://www.stackage.org/$STACKAGESNAPSHOT/cabal.config | grep -v "$(cabal
   info . -v0 | head -n 1 | awk '{ print $2 }' | sed -E 's/-[0-9]+(\.[0-9]+)+//') =="
-  > cabal.config; fi; cabal install --only-dependencies $CABALCONFOPTS --dry -v >
-  installplan.txt; sed -i -e '1,/^Resolving /d' installplan.txt; cat installplan.txt;
-  if diff -u $HOME/.cabsnap/installplan.txt installplan.txt; then echo "cabal build-cache
-  HIT"; rm -rfv .ghc; cp -av $HOME/.cabsnap/ghc $HOME/.ghc; cp -av $HOME/.cabsnap/lib
-  $HOME/.cabsnap/share $HOME/.cabsnap/bin $HOME/.cabal/; else echo "cabal build-cache
-  MISS"; rm -rf $HOME/.cabsnap; mkdir -p $HOME/.ghc $HOME/.cabal/lib $HOME/.cabal/share
-  $HOME/.cabal/bin; cabal install --only-dependencies $CABALCONFOPTS; fi; if [ ! -d
-  $HOME/.cabsnap ]; then echo "snapshotting package-db to build-cache"; mkdir $HOME/.cabsnap;
-  cp -av $HOME/.ghc $HOME/.cabsnap/ghc; cp -av $HOME/.cabal/lib $HOME/.cabal/share
-  $HOME/.cabal/bin installplan.txt $HOME/.cabsnap/; fi;
+  > cabal.config; fi; cabal install --constraint='integer-simple installed' --only-dependencies
+  $CABALCONFOPTS --dry -v > installplan.txt; sed -i -e '1,/^Resolving /d' installplan.txt;
+  cat installplan.txt; if diff -u $HOME/.cabsnap/installplan.txt installplan.txt;
+  then echo "cabal build-cache HIT"; rm -rfv .ghc; cp -av $HOME/.cabsnap/ghc $HOME/.ghc;
+  cp -av $HOME/.cabsnap/lib $HOME/.cabsnap/share $HOME/.cabsnap/bin $HOME/.cabal/;
+  else echo "cabal build-cache MISS"; rm -rf $HOME/.cabsnap; mkdir -p $HOME/.ghc $HOME/.cabal/lib
+  $HOME/.cabal/share $HOME/.cabal/bin; cabal install --constraint='integer-simple
+  installed' --only-dependencies $CABALCONFOPTS; fi; if [ ! -d $HOME/.cabsnap ]; then
+  echo "snapshotting package-db to build-cache"; mkdir $HOME/.cabsnap; cp -av $HOME/.ghc
+  $HOME/.cabsnap/ghc; cp -av $HOME/.cabal/lib $HOME/.cabal/share $HOME/.cabal/bin
+  installplan.txt $HOME/.cabsnap/; fi;
 script:
 - if [ -f configure.ac ]; then autoreconf -i; fi
 - cabal configure $CABALCONFOPTS -v2
@@ -39,7 +40,7 @@ script:
 - if [ "$CABALVER" = "1.22" ]; then cabal check; fi
 - cabal sdist
 - SRC_TGZ=$(cabal info . | awk '{print $2;exit}').tar.gz && (cd dist && cabal install
-  --force-reinstalls $CABALFLAGS "$SRC_TGZ")
+  --constraint='integer-simple installed' --force-reinstalls $CABALFLAGS "$SRC_TGZ")
 matrix:
   fast_finish: true
   include:
@@ -83,7 +84,7 @@ matrix:
         - ghc-7.10.2
         - libgmp-dev
     compiler: ! ': # ghc-7.10.2 cabal-1.22'
-  - env: GHCVER=7.10.2 CABALVER=1.22 STACKAGESNAPSHOT=lts-3.4
+  - env: GHCVER=7.10.2 CABALVER=1.22 STACKAGESNAPSHOT=lts-3.0
     addons:
       apt:
         sources:
@@ -92,7 +93,7 @@ matrix:
         - cabal-install-1.22
         - ghc-7.10.2
         - libgmp-dev
-    compiler: ! ': # ghc-7.10.2 cabal-1.22 lts-3.4'
+    compiler: ! ': # ghc-7.10.2 cabal-1.22 lts-3.0'
   - env: GHCVER=7.10.2 CABALVER=1.22 STACKAGESNAPSHOT=lts-3.22
     addons:
       apt:
@@ -113,6 +114,16 @@ matrix:
         - ghc-7.10.3
         - libgmp-dev
     compiler: ! ': # ghc-7.10.3 cabal-1.22'
+  - env: GHCVER=7.10.3 CABALVER=1.22 STACKAGESNAPSHOT=lts-4.0
+    addons:
+      apt:
+        sources:
+        - hvr-ghc
+        packages:
+        - cabal-install-1.22
+        - ghc-7.10.3
+        - libgmp-dev
+    compiler: ! ': # ghc-7.10.3 cabal-1.22 lts-4.0'
   - env: GHCVER=7.10.3 CABALVER=1.22 STACKAGESNAPSHOT=lts-4.2
     addons:
       apt:
@@ -133,6 +144,36 @@ matrix:
         - ghc-7.10.3
         - libgmp-dev
     compiler: ! ': # ghc-7.10.3 cabal-1.22 lts-5.0'
+  - env: GHCVER=7.10.3 CABALVER=1.22 STACKAGESNAPSHOT=lts-5.18
+    addons:
+      apt:
+        sources:
+        - hvr-ghc
+        packages:
+        - cabal-install-1.22
+        - ghc-7.10.3
+        - libgmp-dev
+    compiler: ! ': # ghc-7.10.3 cabal-1.22 lts-5.18'
+  - env: GHCVER=7.10.3 CABALVER=1.22 STACKAGESNAPSHOT=lts-6.0
+    addons:
+      apt:
+        sources:
+        - hvr-ghc
+        packages:
+        - cabal-install-1.22
+        - ghc-7.10.3
+        - libgmp-dev
+    compiler: ! ': # ghc-7.10.3 cabal-1.22 lts-6.0'
+  - env: GHCVER=7.10.3 CABALVER=1.22 STACKAGESNAPSHOT=lts-6.5
+    addons:
+      apt:
+        sources:
+        - hvr-ghc
+        packages:
+        - cabal-install-1.22
+        - ghc-7.10.3
+        - libgmp-dev
+    compiler: ! ': # ghc-7.10.3 cabal-1.22 lts-6.5'
   - env: GHCVER=7.10.3 CABALVER=1.22 CABALCONFIG=cabal.1.config NOTESTS=YES
     addons:
       apt:
