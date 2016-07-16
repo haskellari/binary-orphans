@@ -1,5 +1,5 @@
 name: binary-orphans
-version: 0.1.5.0
+version: 0.1.5.1
 synopsis: Orphan instances for binary
 description: |
   `binary-orphans` defines orphan instances for types in some popular packages.
@@ -49,6 +49,7 @@ tests:
     source-dirs: test
     dependencies:
       - binary-orphans
+      - QuickCheck           >=2.7      && <2.9.2
       - quickcheck-instances >=0.3.11   && <0.3.13
       - tasty                >=0.10.1.2 && <0.12
       - tasty-quickcheck     >=0.8.3.2  && <0.9

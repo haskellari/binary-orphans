@@ -1,3 +1,6 @@
+- 0.1.5.1
+  - Fix issue with binary-0.8.4.* and GHC-7.*
+
 - 0.1.5.0
   - Add `CI a` instance
   - Add `Alt f a` instance for `base >= 4.8.0.0`

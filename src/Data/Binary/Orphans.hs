@@ -155,7 +155,7 @@ instance Binary Time.AbsoluteTime where
   put = put . flip Time.diffAbsoluteTime Time.taiEpoch
 
 
-#if !MIN_VERSION_binary(0,8,4) || !MIN_VERSION_base(4,9,0)
+#if !MIN_VERSION_binary(0,8,4)
 
 -------------------------------------------------------------------------------
 -- Monoid
@@ -202,11 +202,13 @@ instance Binary (f a) => Binary (Monoid.Alt f a) where
   get = fmap Monoid.Alt get
   put = put . Monoid.getAlt
 #endif
+#endif
 
 -------------------------------------------------------------------------------
 -- semigroups
 -------------------------------------------------------------------------------
 
+#if !MIN_VERSION_binary(0,8,4) || !MIN_VERSION_base(4,9,0)
 -- | /Since: binary-orphans-0.1.3.0/
 instance Binary a => Binary (Semigroup.Min a) where
   get = fmap Semigroup.Min get
