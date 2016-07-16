@@ -1,5 +1,6 @@
-resolver: nightly-2016-01-08
+resolver: nightly-2016-07-15
 packages:
 - '.'
-extra-deps: []
+extra-deps:
+- binary-0.8.4.1
 flags: {}
