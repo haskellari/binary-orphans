@@ -17,7 +17,7 @@ ghc-options: -Wall -fno-warn-orphans
 
 dependencies:
   - base                     >=4.6.0.1   && <4.10
-  - aeson                    >=0.7.0.6   && <0.11.3 # Binary Value
+  - aeson                    >=0.7.0.6   && <1.1 # Binary Value
   - binary                   >=0.5.1.1   && <0.8.5  # We define Binary instances
   - case-insensitive         >=1.2.0.4   && <1.2.1
   - hashable                 >=1.2.3.3   && <1.3
