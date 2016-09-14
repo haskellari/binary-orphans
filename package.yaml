@@ -31,7 +31,7 @@ dependencies:
 when:
   - condition: "!impl(ghc >= 8.0)"
     dependencies:
-    - semigroups               >=0.16.2.2  && <0.18.2 # Binary NonEmpty
+    - semigroups               >=0.16.2.2  && <0.18.3 # Binary NonEmpty
   - condition: "!impl(ghc >= 7.10)"
     dependencies:
     - void                     >=0.7       && <0.8
