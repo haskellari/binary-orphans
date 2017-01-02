@@ -33,7 +33,7 @@ module Data.Binary.Orphans (
   module Data.Binary,
   ) where
 
-import           Control.Monad (liftM, liftM2, liftM3, mzero)
+import           Control.Monad (liftM, liftM2, liftM3)
 import qualified Data.Aeson as A
 import           Data.Bits
 import           Data.Binary
@@ -266,7 +266,7 @@ instance (CI.FoldCase a, Binary a) => Binary (CI.CI a) where
 #if !MIN_VERSION_binary(0,8,0)
 instance Binary Void.Void where
     put     = Void.absurd
-    get     = mzero
+    get     = fail "Binary.get @Void"
 #endif
 
 -------------------------------------------------------------------------------

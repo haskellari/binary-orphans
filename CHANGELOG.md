@@ -1,3 +1,6 @@
+- 0.1.5.2
+  - Fix issue with binary-0.5.*
+
 - 0.1.5.1
   - Fix issue with binary-0.8.4.* and GHC-7.*
 
