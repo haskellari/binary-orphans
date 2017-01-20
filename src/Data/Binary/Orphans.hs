@@ -41,7 +41,11 @@ import qualified Data.CaseInsensitive as CI
 import qualified Data.Fixed as Fixed
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
-import           Data.Hashable
+#if MIN_VERSION_hashable(1,2,5)
+import           Data.Hashable (Hashable, Hashed, hashed, unhashed)
+#else
+import           Data.Hashable (Hashable)
+#endif
 import           Data.List (unfoldr, foldl')
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Monoid as Monoid
