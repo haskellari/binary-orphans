@@ -41,7 +41,7 @@ import qualified Data.CaseInsensitive as CI
 import qualified Data.Fixed as Fixed
 import qualified Data.HashMap.Lazy as HM
 import qualified Data.HashSet as HS
-import           Data.Hashable (Hashable)
+import           Data.Hashable
 import           Data.List (unfoldr, foldl')
 import qualified Data.List.NonEmpty as NE
 import qualified Data.Monoid as Monoid
@@ -89,6 +89,12 @@ instance  (Hashable k, Eq k, Binary k, Binary v) => Binary (HM.HashMap k v) wher
 instance (Hashable v, Eq v, Binary v) => Binary (HS.HashSet v) where
   get = fmap HS.fromList get
   put = put . HS.toList
+
+#if MIN_VERSION_hashable(1,2,5)
+instance (Hashable a, Binary a) => Binary (Hashed a) where
+  get = fmap hashed get
+  put = put . unhashed
+#endif
 
 #if !(MIN_VERSION_scientific(0,3,4))
 instance Binary S.Scientific where
@@ -243,7 +249,7 @@ instance Binary a => Binary (NE.NonEmpty a) where
 instance Binary m => Binary (Semigroup.WrappedMonoid m) where
   get = fmap Semigroup.WrapMonoid get
   put = put . Semigroup.unwrapMonoid
- 
+
 -- | /Since: binary-orphans-0.1.5.0/
 instance (Binary a, Binary b) => Binary (Semigroup.Arg a b) where
   get                     = liftM2 Semigroup.Arg get get
