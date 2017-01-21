@@ -1,10 +1,5 @@
--- This file has been generated from package.yaml by hpack version 0.15.0.
---
--- see: https://github.com/sol/hpack
-
 name:           binary-orphans
-version:        0.1.5.2
-x-revision:     1
+version:        0.1.6.0
 synopsis:       Orphan instances for binary
 description:    `binary-orphans` defines orphan instances for types in some popular packages.
 category:       Web

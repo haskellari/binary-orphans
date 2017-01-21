@@ -1,3 +1,6 @@
+- 0.1.6.0
+  - Add instance for `hashed` in `hashable >=1.2.5.0`
+
 - 0.1.5.2
   - Fix issue with binary-0.5.*
 
