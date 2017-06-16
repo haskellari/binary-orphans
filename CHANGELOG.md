@@ -1,3 +1,7 @@
+- 0.1.7.0
+  - GHC-8.2 support
+  - `SystemTime` instance (`time-1.8`)
+
 - 0.1.6.0
   - Add instance for `hashed` in `hashable >=1.2.5.0`
 
