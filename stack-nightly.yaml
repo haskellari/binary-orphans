@@ -1,7 +1,0 @@
-resolver: nightly-2016-09-22
-packages:
-- '.'
-extra-deps:
-- binary-0.8.4.1
-- QuickCheck-2.9.2
-flags: {}

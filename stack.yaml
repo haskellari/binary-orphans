@@ -1,1 +1,6 @@
-stack-lts-2.yaml
+resolver: nightly-2017-06-01
+packages:
+- '.'
+extra-deps:
+- QuickCheck-2.10.0.1
+- quickcheck-instances-0.3.16
