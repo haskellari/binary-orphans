@@ -62,6 +62,10 @@ import           Data.Vector.Binary ()
 import qualified Data.Scientific as S
 #endif
 
+#if MIN_VERSION_time(1,8,0)
+import qualified Data.Time.Clock.System as Time
+#endif
+
 instance Binary A.Value where
   get = do
     t <- get :: Get Int
@@ -160,6 +164,12 @@ instance Binary Time.AbsoluteTime where
   get = fmap (flip Time.addAbsoluteTime Time.taiEpoch) get
   put = put . flip Time.diffAbsoluteTime Time.taiEpoch
 
+#if MIN_VERSION_time(1,8,0)
+-- | /Since: binary-orphans-0.1.7.0/
+instance Binary Time.SystemTime where
+    get = liftM2 Time.MkSystemTime get get
+    put (Time.MkSystemTime s ns) = put s >> put ns
+#endif
 
 #if !MIN_VERSION_binary(0,8,4)
 

@@ -42,16 +42,3 @@ tests = testGroup "Roundtrip"
 
 roundtrip :: (Eq a, Show a, Binary a) => Proxy a -> a -> Property
 roundtrip _ x = x === decode (encode x)
-
-instance (CI.FoldCase a, Arbitrary a) => Arbitrary (CI a) where
-    arbitrary = fmap CI.mk arbitrary
-
-instance Arbitrary a => Arbitrary (Min a) where
-    arbitrary = fmap Min arbitrary
-    shrink = fmap Min . shrink . getMin
-
-#if !MIN_VERSION_QuickCheck(2,9,0)
-instance Arbitrary a => Arbitrary (Sum a) where
-    arbitrary = fmap Sum arbitrary
-    shrink = fmap Sum . shrink . getSum
-#endif
