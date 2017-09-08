@@ -1,3 +1,6 @@
+- 0.1.8.0
+  - `ZonedTime` instance (by @mstksg)
+
 - 0.1.7.0
   - GHC-8.2 support
   - `SystemTime` instance (`time-1.8`)
