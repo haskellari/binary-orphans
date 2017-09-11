@@ -159,6 +159,11 @@ instance Binary Time.LocalTime where
   get = liftM2 Time.LocalTime get get
   put (Time.LocalTime d tod) = put d >> put tod
 
+-- | /Since: binary-orphans-0.1.8.0/
+instance Binary Time.ZonedTime where
+  get = liftM2 Time.ZonedTime get get
+  put (Time.ZonedTime t z) = put t >> put z
+
 -- | /Since: binary-orphans-0.1.4.0/
 instance Binary Time.AbsoluteTime where
   get = fmap (flip Time.addAbsoluteTime Time.taiEpoch) get
