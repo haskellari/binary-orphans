@@ -1,6 +1,6 @@
 name:           binary-orphans
 version:        0.1.8.0
-x-revision:     3
+x-revision:     4
 synopsis:       Orphan instances for binary
 description:    `binary-orphans` defines orphan instances for types in some popular packages.
 category:       Web
