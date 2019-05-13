@@ -1,7 +1,7 @@
 cabal-version: 1.12
 name:          binary-orphans
 version:       1.0.1
-synopsis:      Compatibility package for @binary@; provides instances.
+synopsis:      Compatibility package for binary; provides instances
 category:      Data, Binary, Parsing, Compatibility
 description:
   This package provides instances defined in later versions of @binary@ package
