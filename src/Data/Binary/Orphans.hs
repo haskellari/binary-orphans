@@ -160,17 +160,14 @@ instance Fixed.HasResolution a => Binary (Fixed.Fixed a) where
 -- binary-0.8.2.0
 -------------------------------------------------------------------------------
 
-#if !(MIN_VERSION_binary(0,8,2))
 
 -------------------------------------------------------------------------------
 -- When using GHC >= 8, Data.Binary.Get.Get implements MonadFail and delegates its fail to MonadFail.fail.
 
-#if !(MIN_VERSION_base(4,9,0))
+#if !(MIN_VERSION_binary(0,8,2)) || !(MIN_VERSION_base(4,9,0))
 instance Fail.MonadFail Get where
     -- this is ok, as if old base: Prelude.fail is Monad's fail
     fail = Prelude.fail
-#endif
-
 #endif
 
 -------------------------------------------------------------------------------

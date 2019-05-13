@@ -1,3 +1,7 @@
+# 1.0.1
+
+- Fix `MonadFail` instances shim
+
 # 1
 
 Stripped down the package to only shim `binary` orphans.
