@@ -1,6 +1,7 @@
 # 1.0.1
 
 - Fix `MonadFail` instances shim
+- `NonEmpty` doesn't fail on empty list
 
 # 1
 

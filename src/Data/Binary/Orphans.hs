@@ -282,7 +282,11 @@ instance (Binary a, Binary b) => Binary (Semigroup.Arg a b) where
   put (Semigroup.Arg a b) = put a <> put b
 
 instance Binary a => Binary (NE.NonEmpty a) where
-  get = fmap NE.fromList get
+  get = do
+      x <- get
+      case x of
+          []     -> fail "empty NonEmpty"
+          (x:xs) -> return (x NE.:| xs)
   put = put . NE.toList
 
 #endif
