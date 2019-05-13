@@ -12,11 +12,13 @@ import Data.Binary
 import Data.Binary.Put
 
 import           Control.Applicative   (Alternative (..))
-import           Control.Monad         (MonadPlus (..), liftM2)
+import           Control.Monad         (MonadPlus (..), liftM, liftM2)
 import qualified Control.Monad.Fail    as Fail
+import           Data.Bits             (Bits, shiftL, shiftR, (.|.))
 import           Data.Complex          (Complex (..))
 import qualified Data.Fixed            as Fixed
 import           Data.Functor.Identity (Identity (..))
+import           Data.List             (foldl', unfoldr)
 import qualified Data.List.NonEmpty    as NE
 import qualified Data.Monoid           as Monoid
 import           Data.Semigroup        ((<>))
