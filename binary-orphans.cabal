@@ -24,7 +24,8 @@ tested-with:
    || ==8.2.2
    || ==8.4.4
    || ==8.6.5
-   || ==8.8.1
+   || ==8.8.2
+   || ==8.10.1
 
 extra-source-files: CHANGELOG.md
 
@@ -38,8 +39,8 @@ library
   exposed-modules:  Data.Binary.Orphans
   other-extensions: CPP
   build-depends:
-      base          >=4.5     && <4.14
-    , binary        >=0.5.1.0 && <0.6 || >=0.7.1.0 && <0.8 || >=0.8.3.0 && <0.8.8
+      base          >=4.5     && <4.15
+    , binary        >=0.5.1.0 && <0.6 || >=0.7.1.0 && <0.8 || >=0.8.3.0 && <0.8.9
     , transformers  >=0.3.0.0 && <0.7
 
   if !impl(ghc >=7.10)
