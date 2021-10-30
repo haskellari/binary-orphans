@@ -28,6 +28,12 @@ import           Data.Void             (Void, absurd)
 import           GHC.Fingerprint       (Fingerprint (..))
 import           Numeric.Natural       (Natural)
 
+#if MIN_VERSION_base(4,16,0)
+import Data.Tuple (Solo (..))
+#else
+import Data.Tuple.Solo (Solo (..))
+#endif
+
 -------------------------------------------------------------------------------
 -- binary-0.7.1.0
 -------------------------------------------------------------------------------
@@ -323,3 +329,11 @@ instance Binary a => Binary (Identity a) where
 #endif
 
 #endif
+
+-------------------------------------------------------------------------------
+-- future-binary
+-------------------------------------------------------------------------------
+
+instance Binary a => Binary (Solo a) where
+  put (Solo x) = put x
+  get = fmap Solo get
