@@ -1,3 +1,7 @@
+# 1.0.3
+
+- Add `ByteArray` (from `Data.Array.Byte` instance)
+
 # 1.0.2
 
 - Add `Solo` instance
