@@ -13,7 +13,7 @@ import Test.QuickCheck.Instances ()
 import Test.Tasty                (TestTree, defaultMain, testGroup)
 import Test.Tasty.QuickCheck     (testProperty)
 
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_base(4,9,0)
 import Data.Array.Byte (ByteArray)
 #endif
 
@@ -26,7 +26,7 @@ tests = testGroup "Roundtrip"
   , testProperty "Sum Int"         $ roundtrip (Proxy :: Proxy (Sum Int))
   , testProperty "Min Int"         $ roundtrip (Proxy :: Proxy (Min Int))
   , testProperty "Solo Int"        $ roundtrip (Proxy :: Proxy (Solo Int))
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_base(4,9,0)
   , testProperty "ByteArray"       $ roundtrip (Proxy :: Proxy ByteArray)
 #endif
   ]
