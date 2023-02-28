@@ -37,7 +37,7 @@ import Data.Tuple (Solo (..))
 import Data.Tuple.Solo (Solo (..))
 #endif
 
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_base(4,9,0)
 import Data.Array.Byte (ByteArray (..), MutableByteArray (..))
 import GHC.Exts
        (Int (..), indexWord8Array#, newByteArray#, sizeofByteArray#,
@@ -346,11 +346,13 @@ instance Binary a => Binary (Identity a) where
 -- future-binary
 -------------------------------------------------------------------------------
 
+-- | @since 1.0.2
 instance Binary a => Binary (Solo a) where
   put (Solo x) = put x
   get = fmap Solo get
 
-#if MIN_VERSION_base(4,17,0)
+#if MIN_VERSION_base(4,9,0)
+-- | @since 1.0.3
 instance Binary ByteArray where
   put ba = put maxI >> go 0
     where
