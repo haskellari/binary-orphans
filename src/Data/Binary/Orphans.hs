@@ -31,10 +31,18 @@ import           Data.Void             (Void, absurd)
 import           GHC.Fingerprint       (Fingerprint (..))
 import           Numeric.Natural       (Natural)
 
-#if MIN_VERSION_base(4,16,0)
-import Data.Tuple (Solo (..))
+#if MIN_VERSION_base(4,18,0)
+import Data.Tuple (Solo (MkSolo))
+#elif MIN_VERSION_base(4,16,0)
+import Data.Tuple (Solo (Solo))
+#define MkSolo Solo
 #else
-import Data.Tuple.Solo (Solo (..))
+#if MIN_VERSION_OneTuple(0,4,0)
+import Data.Tuple.Solo (Solo (MkSolo))
+#else
+import Data.Tuple.Solo (Solo (Solo))
+#define MkSolo Solo
+#endif
 #endif
 
 #if MIN_VERSION_base(4,9,0)
@@ -348,8 +356,8 @@ instance Binary a => Binary (Identity a) where
 
 -- | @since 1.0.2
 instance Binary a => Binary (Solo a) where
-  put (Solo x) = put x
-  get = fmap Solo get
+  put (MkSolo x) = put x
+  get = fmap MkSolo get
 
 #if MIN_VERSION_base(4,9,0)
 -- | @since 1.0.3
