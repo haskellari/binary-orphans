@@ -1,3 +1,7 @@
+# 1.0.4.1
+
+- Support OneTuple-0.4
+
 # 1.0.4
 
 - Depend on `data-byte-array` to provide `Data.Array.Byte` instance
