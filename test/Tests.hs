@@ -4,7 +4,7 @@ module Main (main) where
 import Data.Binary               (Binary, decode, encode)
 import Data.Binary.Orphans ()
 import Data.Monoid               (Sum)
-import Data.Proxy
+import Data.Proxy                (Proxy (..))
 import Data.Semigroup            (Min (..))
 import Data.Tuple.Solo           (Solo (..))
 import Numeric.Natural           (Natural)
