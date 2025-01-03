@@ -1,1 +1,5 @@
 packages: .
+tests: True
+
+allow-newer: quickcheck-instances:base
+allow-newer: these:base
