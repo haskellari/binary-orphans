@@ -6,7 +6,7 @@ import Data.Binary.Orphans ()
 import Data.Monoid               (Sum)
 import Data.Proxy                (Proxy (..))
 import Data.Semigroup            (Min (..))
-import Data.Tuple.Solo           (Solo (..))
+-- import Data.Tuple.Solo           (Solo (..))
 import Numeric.Natural           (Natural)
 import Test.QuickCheck           (Property, (===))
 import Test.QuickCheck.Instances ()
@@ -21,7 +21,7 @@ tests = testGroup "Roundtrip"
   [ testProperty "Natural"         $ roundtrip (Proxy :: Proxy Natural)
   , testProperty "Sum Int"         $ roundtrip (Proxy :: Proxy (Sum Int))
   , testProperty "Min Int"         $ roundtrip (Proxy :: Proxy (Min Int))
-  , testProperty "Solo Int"        $ roundtrip (Proxy :: Proxy (Solo Int))
+  -- , testProperty "Solo Int"        $ roundtrip (Proxy :: Proxy (Solo Int)) -- no Arbitrary instance (always)
   , testProperty "ByteArray"       $ roundtrip (Proxy :: Proxy ByteArray)
   ]
 
