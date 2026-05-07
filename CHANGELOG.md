@@ -1,3 +1,7 @@
+# 1.0.6
+
+- Use automatic flags for compatibility conditionals
+
 # 1.0.5
 
 - Support GHC-8.6.5..GHC-9.10.1
