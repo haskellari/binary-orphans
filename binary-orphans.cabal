@@ -1,6 +1,6 @@
 cabal-version:      1.12
 name:               binary-orphans
-version:            1.0.5.1
+version:            1.0.6
 synopsis:           Compatibility package for binary; provides instances
 category:           Data, Binary, Parsing, Compatibility
 description:
@@ -23,7 +23,7 @@ tested-with:
    || ==9.4.8
    || ==9.6.6
    || ==9.8.4
-   || ==9.10.2
+   || ==9.10.3
    || ==9.12.4
    || ==9.14.1
 
@@ -32,6 +32,16 @@ extra-source-files: CHANGELOG.md
 source-repository head
   type:     git
   location: https://github.com/phadej/binary-orphans.git
+
+flag base-ge-4-16
+  description: @base >=4.16@ (GHC-9.2)
+  default:     True
+  manual:      False
+
+flag base-ge-4-17
+  description: @base >=4.17@ (GHC-9.4)
+  default:     True
+  manual:      False
 
 library
   default-language: Haskell2010
@@ -43,11 +53,23 @@ library
       base    >=4.12.0.0 && <4.23
     , binary  >=0.8.6.0  && <0.8.10
 
-  if !impl(ghc >=9.2)
+  if !flag(base-ge-4-16)
     build-depends: OneTuple >=0.4.2 && <0.5
 
-  if impl(ghc >=8.0 && <9.4)
+  if !flag(base-ge-4-17)
     build-depends: data-array-byte >=0.1.0.1 && <0.2
+
+  if flag(base-ge-4-16)
+    build-depends: base >=4.16
+
+  else
+    build-depends: base <4.16
+
+  if flag(base-ge-4-17)
+    build-depends: base >=4.17
+
+  else
+    build-depends: base <4.17
 
 test-suite binary-orphans-test
   default-language: Haskell2010
@@ -64,5 +86,5 @@ test-suite binary-orphans-test
     , tasty                 >=0.10.1.2 && <1.6
     , tasty-quickcheck      >=0.8.3.2  && <0.12
 
-  if impl(ghc >=8.0 && <9.4)
+  if !flag(base-ge-4-17)
     build-depends: data-array-byte
